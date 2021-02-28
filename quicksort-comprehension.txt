@@ -1,0 +1,54 @@
+package com.myself.practise;
+import java.util.Arrays;
+public class Project1 {
+	    public static void main(String[] args) {
+	        int[] arr = new int[]{5,3,7,3,8,2,7,1,9,3,4,2,9,8,6,9,5,0,5};
+	        System.out.println(Arrays.toString(arr));
+	        quickSort(arr, 0, arr.length - 1);
+	        System.out.println(Arrays.toString(arr));
+	    }
+/*快速排序设计思路：（前提是数组元素至少是2才排序，否则直接输出数组元素）
+ * 将第一个数组元素当做基准，以这个基准将数组分成了比基准小的放左边，比基准大的放右边，和基准相等都可以放。
+ * 注意：high先移动。
+ * high角标指向要排序的数组最后一个元素，从最后一个元素开始一直左移角标减小，判断角标所指的元素是否比基准大，大的话继续左移直达遇到比基准小的停。
+ * low角标指向要排序的数组第一个元素，从第一个元素开始一直右移角标加大，判断角标所指的元素是否比基准小，小的话继续右移直达遇到比基准大的停。
+ *两个角标都停下时交换对应的数组元素值，high角标又先继续左移循环上面的操作，直到两角标重叠，角标所指的值与基准值对换，完成一轮排序
+ *一轮排序后基准左边是比基准小的但无序，右边同理，所以递归使用quickSort方法在进行子数组的排序，使用递归此方法，直到不满足至少2个元素的条件停止，输出已经排好的序列。
+ */
+	    private static void quickSort(int[] arr, int start, int end) {
+	        if(start < end){//表示每次要排序的元素个数至少2个才执行
+	            // 以数组第一个元素为基准
+	            int stard = arr[start];//start，end表示是开头结尾，后面递归时会在用到，所以要另外设置high,low来当做移动的角标
+	            // 记录一下排序的下标，low从排序数组的第一位开始，high从排序数组最后一位开始
+	            int high = end;
+	            int low = start;
+	            while(low !=high){//循环以下操作，直到两角标指向同一个位置时，停止循环
+	                // 当high角标所指的数字比标准数大时，就像左移动一位，直到遇到high角标所指的数字比标准数小的停止
+	                while(low < high && arr[high] >= start){
+	                    high--;
+	                }
+	       
+	                // 当low角标所指的数字比标准数大时，就像右移动一位，直到遇到low角标所指的数字比标准数大的停止
+	                while(low < high && arr[low] <= start){
+	                    low++;
+	         
+	            }
+	                if(low<high){//跳出了以上两个while循环时即lOW,high都停止，这时low<high的话，对换low,high角标所指的数字
+	                	int t=arr[low];
+	                	arr[low]=arr[high];
+	                	arr[high]=t;
+	                }
+	            }
+	           /*两角标指向同一个位置时，我们要用基准来代替角标指向的数，让两角标指向同一个位置上的数赋给开头，
+	            *（为什么是赋给开头呢？因为当两指标相邻且却确定了他们所指数的位置时，high指标肯定先左移，这时两个指标重叠，high指向了刚刚lOW已经确定比基准小的数，
+	            * 这时候去执行以下操作就会使基准左边都比基准小，基准右边数都比基准大
+	            */
+	            arr[start]=arr[high];//这里相当于stard是临时变量来使基准与start角标所指的数交换。
+	            arr[high] = stard;
+	            // 处理左边所有小于等于标准数的数字
+	            quickSort(arr, start, low-1);
+	            // 处理右边所有比标准数大的数字
+	            quickSort(arr, low + 1, end);
+	        }
+	    }
+	}
